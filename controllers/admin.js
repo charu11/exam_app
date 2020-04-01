@@ -49,6 +49,67 @@ router.use(function (req, res, next) {
 });
 
 
+
+
+
+// get student details
+
+
+exports.getSubjects = function(req, res){
+  console.log('getting the details')
+  var query = Subject.find({'studentId': req.body.studentId});
+  query.exec(function(err, subjects){
+      if(err){
+          console.log('error has occured', err);
+          res.sendStatus(409);
+
+      }else{
+          if(subjects !== null){
+              console.log('result is not null', subjects);
+              res.json({message: 'succcess', content: subjects});
+          }else{
+              console.log('result is null');
+              res.sendStatus(409);
+          }
+
+      }
+  });
+}  
+
+
+
+// get lecture details
+
+exports.getDetails = function(req, res){
+  console.log('getting the details')
+  var query = Subject.find({'lectureId': req.body.lectureId});
+  query.exec(function(err, details){
+      if(err){
+          console.log('error has occured', err);
+          res.sendStatus(409);
+
+      }else{
+          if(details !== null){
+              console.log('result is not null', details);
+              res.json({message: 'succcess', content: details});
+          }else{
+              console.log('result is null');
+              res.sendStatus(409);
+          }
+
+      }
+  });
+}  
+
+
+
+
+
+
+
+
+
+
 //Student sign Up
 
 exports.studentSignup = function(req, res){
@@ -210,70 +271,6 @@ exports.deleteStudent = function(req, res){
 
 }
 
-
-//Admin sign Up
-
-exports.adminSignup = function(req, res){
-    console.log('############ Admin Register ###############');
-    Admin.findOne({email : req.body.email} && {adminRegNumber : req.body.adminRegNumber})
-    .exec(function(err, admins){
-      if(err){
-        console.log('#### error occured #####' +err);
-        res.send('error');
-      }else{
-        if(admins !== null){
-          console.log("########### not an null data : Admin already exist ######");
-          res.json({ message: 'failed', details: "email or register Number already registered!", status: "signup_failed"});
-        }else{
-
-          //.............................................validate password..........................................................
-          var schema = new passwordValidator();
-          schema
-          .is().min(6)
-          .is().max(12)
-          .has().uppercase()
-          .has().lowercase()
-          .has().symbols()
-          .has().digits()
-          .has().not().spaces()
-
-          console.log("########### null data #######################");
-          var admin = new Admin();
-          admin.firstName = req.body.firstName;
-          admin.lastName = req.body.lastName;
-          admin.designation = req.body.designation;
-          admin.department = req.body.department;
-          admin.adminRegNumber = req.body.adminRegNumber;
-          admin.email = req.body.email;
-          admin.contactNumber = req.body.contactNumber;
-          
-          var legalPassword =  schema.validate(req.body.password);
-          if(legalPassword == true){
-            admin.password = bcrypt.hashSync(req.body.password, 12);
-              console.log('password entered successfully')
-              res.status(201);
-          }else{
-            console.log('password is not validated')
-            res.status(409)
-            res.json({message: 'failed', details: 'PASSWORD IS INCORRECT'})
-          }
-        
-         admin.save(function(err){
-         if(err){
-           console.log('########### error occured ###############')
-           console.log(err);
-           res.send(err);
-         }else{
-           admin.password = undefined;
-           res.json({message: 'success', details: "SignUp successfully", content: admin});
-           console.log("succesfully signed up ")
-         }
-       });
-       }
-     }
-   }
-   )
-}
 
 //Admin SignIn/Login
 
@@ -606,16 +603,6 @@ exports.deleteSubject = function(req, res){
   })
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 // .......................login required............................

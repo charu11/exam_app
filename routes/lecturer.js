@@ -35,6 +35,7 @@ router.use(function (req, res, next) {
 
 
 //router.post('/loginreq', LecturerController.loginRequired);
+router.get('/getDetails', LecturerController.loginRequired, LecturerController.getDetails)
 router.get('/getSubjects', LecturerController.loginRequired, LecturerController.getSubjects)
 router.post('/Lecturerlogin', LecturerController.lecturerLogin);
 router.put('/profileUpdate', LecturerController.loginRequired, LecturerController.ProfileUpdate);

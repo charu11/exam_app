@@ -45,6 +45,31 @@ router.use(function (req, res, next) {
   next();
 });
 
+
+// get lecture details
+
+exports.getDetails = function(req, res){
+  console.log('getting the details')
+  var query = Subject.find({'lectureId': req.body.lectureId});
+  query.exec(function(err, details){
+      if(err){
+          console.log('error has occured', err);
+          res.sendStatus(409);
+
+      }else{
+          if(details !== null){
+              console.log('result is not null', details);
+              res.json({message: 'succcess', content: details});
+          }else{
+              console.log('result is null');
+              res.sendStatus(409);
+          }
+
+      }
+  });
+}  
+
+
 // view submitted subjects
 
 exports.getSubjects = function(req, res){
