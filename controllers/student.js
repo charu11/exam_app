@@ -51,7 +51,7 @@ router.use(function (req, res, next) {
 // get student details
 exports.getSubjects = function(req, res){
   console.log('getting the details')
-  var query = Subject.find({'studentId': req.body.studentId});
+  var query = Student.findById({'_id': req.body._id});
   query.exec(function(err, subjects){
       if(err){
           console.log('error has occured', err);
@@ -62,7 +62,7 @@ exports.getSubjects = function(req, res){
               console.log('result is not null', subjects);
               res.json({message: 'succcess', content: subjects});
           }else{
-              console.log('result is null');
+              console.log('result is null', subjects);
               res.sendStatus(409);
           }
 
